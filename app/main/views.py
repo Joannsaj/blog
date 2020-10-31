@@ -3,20 +3,20 @@ from . import main
 from ..request import get_quotes
 from .forms import BlogForm
 from ..models import Quote, Blog
+from flask_login import login_required
+
 @main.route('/')
 def index():
 
     '''
     View root page function that returns the index page and its data
     '''
-
-    # Getting popular movie
     quotes = get_quotes()
-    # print(popular_movies)
-    title = 'Home - Welcome to The best Movie Review Website Online'
+    title = 'Home '
     return render_template('index.html', title = title, quote = quotes)
 
 @main.route('/blog', methods = ['GET','POST'])
+@login_required
 def new_blog():
     form = BlogForm()
 
