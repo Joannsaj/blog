@@ -2,8 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,TextAreaField,SubmitField
 from wtforms.validators import Required
 
-class OpinionForm(FlaskForm):
+class BlogForm(FlaskForm):
 
     title = StringField('Review title',validators=[Required()])
-    opinion = TextAreaField('What is your opinion?', validators=[Required()])
+    blog = TextAreaField('What is your opinion?', validators=[Required()])
     submit = SubmitField('Submit')
