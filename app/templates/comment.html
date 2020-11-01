@@ -2,24 +2,33 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
+<style>
+    .container {
+        background-color: burlywood;
+    }
+
+    .border {
+        border: 2px solid black;
+        border-radius: 4px;
+    }
+</style>
 <div class="container">
+    {%if comment_list %}
     <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    {%if comment_list %}
-                    {% for comment in comment_list %}
-                    <h4>{{comment.comment}}</h4>
-                    <h5>-By {{comment.user.username}}</h5>
-                    <a href="/delete_comment/{{comment.id}}">Delete comment</a>
-                    {% endfor %}
-                    {%else%}
-                    <p>No comments</p>
-                    {% endif %}
-                </div>
-            </div>
+
+        {% for comment in comment_list %}
+
+        <div class="col-md-6 border">
+            <h3>{{comment.comment}}</h3>
+            <h5>-By {{comment.user.username}}</h5>
+            <a href="/delete_comment/{{comment.id}}">Delete comment</a>
         </div>
+
+        {% endfor %}
     </div>
+    {%else%}
+    <h1>No comments</h1>
+    {% endif %}
 </div>
 
 {% endblock %}
