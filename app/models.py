@@ -15,7 +15,8 @@ class User(UserMixin,db.Model):
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
     pass_secure = db.Column(db.String(255))
-    # blogs = db.relationship('Blog',backref = 'role',lazy="dynamic")
+    blogs = db.relationship('Blog',backref = 'role',lazy="dynamic")
+    comments = db.relationship('Comment',backref = 'role',lazy="dynamic")
    
     @property
     def password(self):
@@ -39,7 +40,29 @@ class Quote:
         self.quote = quote
         self.permalink = permalink
 
-class Blog:
-    def __init__(self, text):
-        self.text = text     
-        user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+class Blog(db.Model):
+    __tablename__= 'blogs'
+    id = db.Column(db.Integer,primary_key = True)
+    text = db.Column(db.String(255))
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+    comments = db.relationship('Comment',backref = 'role',lazy="dynamic")
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer,primary_key = True)
+    comment = db.Column(db.String(255))
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    blog_id = db.Column(db.Integer,db.ForeignKey('blogs.id'))
+    
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(cls,id):
+        comments = Comment.query.filter_by(blog_id=id).all()
+        return comments
+
+    def __repr__(self):
+        return f'Comment {self.comment}'        
