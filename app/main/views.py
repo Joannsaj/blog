@@ -4,7 +4,7 @@ from ..request import get_quotes
 from .forms import BlogForm, UpdateProfile
 from .. import db, photos
 from ..models import Quote, Blog, User
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 @main.route('/')
 def index():
@@ -30,6 +30,26 @@ def new_blog():
 
     title = 'blog'
     return render_template('opinion.html',title = title, blog_form=form)
+
+@main.route('/view_comments/<id>')
+@login_required
+def view_comments(id):
+    comment = Comment.get_comments(id)
+    title = "View Comments"
+    return render_template('comment.html', comment_list= comment, title=title)
+
+@main.route('/comment/<int:blog_id>', methods=['GET', 'POST'])
+@login_required
+def comment(blog_id):
+    form= CommentForm()
+    blog = Blog.query.filter_by(id= blog_id).first()
+    if form.validate_on_submit():
+        comment = form.comment.data
+        new_comment = Comment(comment=comment, user = current_user, blog_id = blog_id)
+        new_comment.save_comment()
+        return redirect(url_for('main.index'))
+    return render_template('new_comment.html', comment_form= form, blog_id=blog_id)
+
 
 @main.route('/user/<uname>')
 def profile(uname):
