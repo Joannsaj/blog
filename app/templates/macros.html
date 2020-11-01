@@ -3,16 +3,16 @@
 <div class="row">
     {% for blog in bloglist %}
 
-    <div class="card col-md-6">
-        <div class="card-body bg-secondary text-white">
-            <h3 class="card-title">{{blog.title}}</h3>
-            <h4 class="card-subtitle mb-2 text-muted">Posted by {{blog.user.username}}</h4>
-            <h4 class="card-text">{{blog.text}}</h4>
-            <p><a href="/update_blog/{{blog.id}}" class="card-link">Update blog</a></p>
-            <p><a href="/comment/{{blog.id}}" class="card-link">Add a Comment</a></p>
-            <p><a href="/view_comments/{{blog.id}}" class="card-link">View comments</a></p>
-            <button type="button" class="btn-btn-danger"><a href="/delete_blog/{{blog.id}}" class="btn-btn-danger"
-                    role="button">Delete blog</a></button>
+    <div class="col-md-6">
+        <div class="broder">
+            <h3>Title:{{blog.title}}</h3>
+            <h4 class="mb-2 text-muted">Posted by:{{blog.user.username}}</h4>
+            <h5 class="mb-2 text-muted">Posted on:{{blog.posted}}</h5>
+            <h3>Opinion:{{blog.text}}</h3>
+            <p><a href="/update_blog/{{blog.id}}">Update blog</a></p>
+            <p><a href="/comment/{{blog.id}}">Add a Comment</a></p>
+            <p><a href="/view_comments/{{blog.id}}">View comments</a></p>
+            <a href="/delete_blog/{{blog.id}}" class="btn-btn-danger" role="button">Delete blog</a>
         </div>
     </div>
     {% endfor %}
