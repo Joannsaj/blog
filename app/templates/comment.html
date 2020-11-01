@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    {%if comment_list %}
+                    {% for comment in comment_list %}
+                    <h4>{{comment.comment}}</h4>
+                    <h5>-By {{comment.user.username}}</h5>
+                    {% endfor %}
+                    {%else%}
+                    <p>No pitches</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

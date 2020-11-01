@@ -1,9 +1,9 @@
 from flask import render_template, request, redirect, url_for,abort
 from . import main
 from ..request import get_quotes
-from .forms import BlogForm, UpdateProfile
+from .forms import BlogForm, UpdateProfile, CommentForm
 from .. import db, photos
-from ..models import Quote, Blog, User
+from ..models import Quote, Blog, User, Comment
 from flask_login import login_required, current_user
 
 @main.route('/')
@@ -13,8 +13,9 @@ def index():
     View root page function that returns the index page and its data
     '''
     quotes = get_quotes()
+    blogs = Blog.query.all()
     title = 'Home '
-    return render_template('index.html', title = title, quote = quotes)
+    return render_template('index.html', title = title, quote = quotes, blogs = blogs)
 
 @main.route('/blog', methods = ['GET','POST'])
 @login_required
@@ -24,12 +25,28 @@ def new_blog():
     if form.validate_on_submit():
         title = form.title.data
         blog = form.blog.data
-        new_blog = Blog(text = blog)
-        # new_blog.save_blog()
+        new_blog = Blog(text = blog, title = title, user=current_user)
+        new_blog.save_blog()
         return redirect(url_for('main.index'))
 
     title = 'blog'
     return render_template('opinion.html',title = title, blog_form=form)
+@main.route('/update_blog/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_blog(id):
+    blog = Blog.query.get(id)
+    if blog.user.id != current_user.id:
+        abort(403)
+
+    form = BlogForm()
+
+    if form.validate_on_submit():
+        blog.title = form.title.data
+        blog.text = form.blog.data
+        db.session.add(blog)
+        db.session.commit()
+        return redirect(url_for('main.index'))
+    return render_template('opinion.html', blog_form=form)
 
 @main.route('/view_comments/<id>')
 @login_required
@@ -49,6 +66,11 @@ def comment(blog_id):
         new_comment.save_comment()
         return redirect(url_for('main.index'))
     return render_template('new_comment.html', comment_form= form, blog_id=blog_id)
+
+@main.route('/delete_comment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_comment(id):
+    comment = Comment.query.get(id)
 
 
 @main.route('/user/<uname>')

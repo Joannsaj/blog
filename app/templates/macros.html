@@ -1,0 +1,20 @@
+{% macro display(bloglist) %}
+<div class="row">
+    <div class="card col-md-4">
+        {%if bloglist %}
+        {% for blog in bloglist %}
+        <div class="card-body bg-secondary text-white">
+            <h3 class="card-title">{{blog.title}}</h3>
+            <h4 class="card-subtitle mb-2 text-muted">Posted by {{blog.user.username}}</h4>
+            <h4 class="card-text">{{blog.text}}</h4>
+            <p><a href="/update_blog/{{blog.id}}" class="card-link">Update blog</a></p>
+            <p><a href="/comment/{{blog.id}}" class="card-link">Add a Comment</a></p>
+            <p><a href="/view_comments/{{blog.id}}" class="card-link">View comments</a></p>
+        </div>
+        {% endfor %}
+        {%else%}
+        <p>No Blogs</p>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

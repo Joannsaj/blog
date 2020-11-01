@@ -4,7 +4,7 @@ from wtforms.validators import Required
 
 class BlogForm(FlaskForm):
 
-    title = StringField('Review title',validators=[Required()])
+    title = StringField('Blog title',validators=[Required()])
     blog = TextAreaField('What is your opinion?', validators=[Required()])
     submit = SubmitField('Submit')
 
