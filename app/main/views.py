@@ -31,6 +31,7 @@ def new_blog():
 
     title = 'blog'
     return render_template('opinion.html',title = title, blog_form=form)
+
 @main.route('/update_blog/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_blog(id):
@@ -47,6 +48,16 @@ def update_blog(id):
         db.session.commit()
         return redirect(url_for('main.index'))
     return render_template('opinion.html', blog_form=form)
+
+@main.route('/delete_blog/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_blog(id):
+    blog = Blog.query.get(id)
+    if blog.user.id != current_user.id:
+        abort(403)
+    db.session.delete(blog)
+    db.session.commit()    
+    return redirect (url_for('main.index'))    
 
 @main.route('/view_comments/<id>')
 @login_required
@@ -67,12 +78,17 @@ def comment(blog_id):
         return redirect(url_for('main.index'))
     return render_template('new_comment.html', comment_form= form, blog_id=blog_id)
 
-@main.route('/delete_comment/<int:id>', methods=['GET', 'POST'])
+@main.route('/delete_comment/<int:comment_id>', methods=['GET', 'POST'])
 @login_required
-def delete_comment(id):
-    comment = Comment.query.get(id)
+def delete_comment(comment_id):
+    comment =Comment.query.get(comment_id)
+    if comment.user.id != current_user.id:
+        abort(403)
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for('main.index'))
 
-
+    
 @main.route('/user/<uname>')
 def profile(uname):
     user = User.query.filter_by(username = uname).first()
