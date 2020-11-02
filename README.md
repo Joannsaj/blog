@@ -6,7 +6,7 @@ Nansamba Joan
 This  is a flask application that allows users to express their ideas and opinions with a personal blog. To use this application effectively users must sign up with this they can post blogs, comment on the existing post, update and delete their posts among other things.
 
 ## Live Link
-[View Site](https://blogapp.herokuapp.com/)
+[View Site](https://joansblogapp.herokuapp.com/)
 
 ## User Story
 * View the blog posts on the site
